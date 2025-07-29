@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select User Type</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+        }
+
+        .top-bar {
+            background-color: #161b22;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .app-title {
+            font-size: 24px;
+            color: #58a6ff;
+            font-weight: bold;
+        }
+
+        .home-btn {
+            background-color: #21262d;
+            color: #c9d1d9;
+            padding: 8px 18px;
+            text-decoration: none;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background-color: #30363d;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 70px);
+        }
+
+        h2 {
+            color: #58a6ff;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 40px;
+        }
+
+        .role-btn {
+            background-color: #238636;
+            padding: 15px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .role-btn:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="app-title">SafeShare Pro</div>
+        <a href="{{ url_for('landing') }}" class="home-btn">🏠︎</a>
+    </div>
+
+    <div class="container">
+        <h2>Select Your Role</h2>
+        <div class="button-container">
+            <a href="/user" class="role-btn">User</a>
+            <a href="/admin" class="role-btn">Admin</a>
+        </div>
+    </div>
+</body>
+</html>

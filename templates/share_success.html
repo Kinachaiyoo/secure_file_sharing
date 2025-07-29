@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Share Link | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .box {
+            background-color: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+            margin: auto;
+            text-align: center;
+            border: 1px solid #30363d;
+        }
+        h2 {
+            color: #58a6ff;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #21262d;
+            color: white;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #238636;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>✅ File Shared Successfully</h2>
+        <p>Share the following <strong>Token</strong> and <strong>Password</strong> with the receiver:</p>
+
+        <label>Token:</label>
+        <input type="text" readonly value="{{ token }}" onclick="this.select();document.execCommand('copy');">
+        
+        <label>Password:</label>
+        <input type="text" readonly value="{{ password }}" onclick="this.select();document.execCommand('copy');">
+
+        <a href="/user_dashboard"><button>Back to Dashboard</button></a>
+    </div>
+</body>
+</html>

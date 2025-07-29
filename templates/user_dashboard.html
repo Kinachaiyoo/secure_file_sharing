@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h2 {
+            color: #58a6ff;
+        }
+        .logout {
+            color: white;
+            text-decoration: none;
+            background: #f85149;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+        .logout:hover {
+            background-color: #da3633;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .left, .right {
+            flex: 1;
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .left h3, .right h3 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 20px;
+            border: 1px solid #30363d;
+            text-align: left;
+        }
+        th {
+            background-color: #21262d;
+        }
+        tr:nth-child(even) {
+            background-color: #1e252c;
+        }
+        .btn, .btn-gen {
+            padding: 10px;
+            background-color: #238636;
+            border: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover, .btn-gen:hover {
+            background-color: #2ea043;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="file"], input[type="text"], input[type="password"], select {
+            padding: 10px;
+            background-color: #21262d;
+            color: white;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            width: 95%;
+        }
+        .msg {
+            background-color: #161b22;
+            color: yellow;
+            padding: 10px 20px;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            margin: 10px auto;
+            text-align: center;
+            width: fit-content;
+            max-width: 90%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Welcome, {{ username }} 👋</h2>
+    <a href="/logout" class="logout">Logout</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        <div class="msg">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
+<!-- Top Section: Verified + Signature -->
+<div class="container">
+    <div class="left">
+        <h3>📁 Verified Files</h3>
+        {% if user_documents %}
+        <table>
+            <tr><th>Document Name</th><th>Status</th><th>Admin Comment</th></tr>
+            {% for doc in user_documents %}
+            <tr>
+                <td>{{ doc.doc_name }}</td>
+                <td>{{ doc.status|capitalize }}</td>
+                <td>{{ doc.comment }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No documents signed yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="right">
+        <h3>🔏 File Signature</h3>
+        <form action="/sign_document" method="POST" enctype="multipart/form-data">
+            <input type="file" name="document" required>
+            <button class="btn" type="submit">Sign Your File</button>
+        </form>
+
+        <form action="/verify_document" method="POST" enctype="multipart/form-data">
+            <input type="file" name="verify_document" required>
+            <button class="btn" type="submit">Verify if File is Signed</button>
+        </form>
+    </div>
+</div>
+
+<!-- Middle Section: Full-Width Chat -->
+<div id="chat" class="left" style="width: 97%; margin-top: 50px;">
+    <h3>💬 Encrypted Chat</h3>
+    <div style="height: 200px; overflow-y: auto; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 5px;  margin-bottom: 20px;">
+        {% for chat in chat_history %}
+            {% if chat.sender == username %}
+                <!-- Sent by me -->
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+                    <div style="max-width: 60%; text-align: right;">
+                        <div style="background-color: #238636; color: white; padding: 10px 14px; border-radius: 18px 18px 0 18px; display: inline-block;">
+                            {{ chat.message }}
+                        </div>
+                        <div style="font-size: 12px; color: gray; margin-top: 4px;">{{ username }}</div>
+                    </div>
+                    <div style="width: 35px; height: 35px; background-color: #238636; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-left: 10px;">
+                        {{ username[0]|upper }}
+                    </div>
+                </div>
+            {% else %}
+                <!-- Received -->
+                <div style="display: flex; justify-content: flex-start; margin-bottom: 12px;">
+                    <div style="width: 35px; height: 35px; background-color: #6e7681; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px;">
+                        {{ chat.sender[0]|upper }}
+                    </div>
+                    <div style="max-width: 60%;">
+                        <div style="background-color: #30363d; color: white; padding: 10px 14px; border-radius: 18px 18px 18px 0; display: inline-block;">
+                            {{ chat.message }}
+                        </div>
+                        <div style="font-size: 12px; color: gray; margin-top: 4px;">{{ chat.sender }}</div>
+
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Chat Input -->
+    <form method="POST" action="/send_message" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <select name="receiver" required style="padding: 10px; background-color: #21262d; color: white; border: 1px solid #30363d; border-radius: 5px; flex: 1;">
+            <option value="" disabled selected>Select user to chat</option>
+            {% for user in registered_users %}
+                {% if user != username %}
+                    <option value="{{ user }}">{{ user }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+
+        <input type="text" name="message" placeholder="Type a message..." required style="flex: 3; padding: 10px; background-color: #21262d; color: white; border: 1px solid #30363d; border-radius: 5px;">
+        
+        <button type="submit" class="btn" style="flex: 0.5;">Send</button>
+    </form>
+</div>
+
+
+<!-- Bottom Section: Share + Receive Side-by-Side -->
+<div class="container">
+    <!-- Share File -->
+    <div class="left">
+        <h3>📤 Share File</h3>
+        <form method="POST" action="/send_file">
+            <label><strong>Select Approved File:</strong></label><br>
+            <select name="filename" required>
+                {% for doc in user_documents %}
+                    {% if doc.status == 'approved' %}
+                        <option value="{{ doc.doc_name }}">{{ doc.doc_name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br><br>
+
+            <label><strong>Password:</strong></label><br>
+            <input type="text" name="password" placeholder="Set a password for the receiver"><br>
+            <button type="submit" class="btn-gen">Generate Link</button>
+        </form>
+
+        <!-- Toggle Tabs -->
+        <div style="margin-top: 30px;">
+            <button onclick="toggleTab('received')" class="btn" style="width: 49%;">📥 Received Files</button>
+            <button onclick="toggleTab('shared')" class="btn" style="width: 49%;">📤 Shared Files</button>
+        </div>
+
+        <div id="received-tab" style="margin-top: 20px;">
+            {% if received_files %}
+            <table><tr><th>File Name</th><th>Sent By</th></tr>
+                {% for file in received_files %}
+                <tr><td>{{ file.filename }}</td><td>{{ file.sender }}</td></tr>
+                {% endfor %}
+            </table>
+            {% else %}<p>No files received yet.</p>{% endif %}
+        </div>
+
+        <div id="shared-tab" style="display: none; margin-top: 20px;">
+            {% if sent_files %}
+            <table><tr><th>File Name</th><th>Shared With</th></tr>
+                {% for file in sent_files %}
+                <tr><td>{{ file.filename }}</td><td>{{ file.receiver }}</td></tr>
+                {% endfor %}
+            </table>
+            {% else %}<p>No files shared yet.</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- Receive File -->
+    <div class="left">
+        <h3>📥 Receive File</h3>
+        <form method="POST" action="/download_shared">
+            <label><strong>Paste Shared Token:</strong></label><br>
+            <input type="text" name="token" placeholder="e.g., abcd1234..." required><br><br>
+            <label><strong>Password:</strong></label><br>
+            <input type="password" name="password" placeholder="Enter password set by sender" required><br>
+            <button type="submit" class="btn">Get File</button>
+        </form>
+
+        {% if shared_filename and shared_token_file %}
+        <div style="margin-top: 30px;">
+            <p><strong>{{ shared_filename }}</strong> is ready:</p>
+            <div style="display: flex; gap: 20px;">
+                <a href="/view_shared/{{ shared_token_file }}" target="_blank" style="flex: 1;">
+                    <button class="btn" style="width: 100%;">View File</button>
+                </a>
+                <a href="/download_final/{{ shared_token_file }}?display_name={{ shared_filename }}" style="flex: 1;">
+                    <button class="btn" style="width: 100%;">Download File</button>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+<script>
+    function toggleTab(tab) {
+        document.getElementById("received-tab").style.display = (tab === 'received') ? 'block' : 'none';
+        document.getElementById("shared-tab").style.display = (tab === 'shared') ? 'block' : 'none';
+    }
+    toggleTab('received');
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.msg');
+        messages.forEach(msg => {
+            msg.style.transition = "opacity 0.3s ease-out";
+            msg.style.opacity = 0;
+            setTimeout(() => msg.remove(), 500);
+        });
+    }, 2000);
+    // Scroll chat box to bottom
+    window.onload = function () {
+        const chatBox = document.querySelector('[style*="overflow-y: auto"]');
+        if (chatBox) {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    };
+    window.onload = function () {
+    const chatBox = document.querySelector('#chat div[style*="overflow-y: auto"]');
+    if (chatBox) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    };
+</script>
+
+</body>
+</html>

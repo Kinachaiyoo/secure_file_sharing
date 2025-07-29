@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #58a6ff;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border-radius: 5px;
+            border: none;
+            background: #30363d;
+            color: white;
+        }
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #238636;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #2ea043;
+        }
+        .msg {
+            text-align: center;
+            color: yellow;
+            margin-top: 15px;
+        }
+        .home-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .home-link a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>User Login</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="msg">
+        {% for category, message in messages %}
+            {{ message }}<br>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Username</label>
+        <input type="text" name="username" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <label>Login Token</label>
+        <input type="text" name="login_token" required placeholder="Paste your login token here">
+
+        <button class="btn" type="submit">Login</button>
+    </form>
+
+    <div class="home-link"><a href="/user">← Back to User Menu</a></div>
+</body>
+</html>

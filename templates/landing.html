@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SafeShare Pro</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        .top-bar {
+            background-color: #161b22;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .top-bar .app-title {
+            font-size: 24px;
+            color: #58a6ff;
+            font-weight: bold;
+        }
+
+        .start-btn {
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 70px);
+        }
+
+        .box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 60px;
+            text-align: center;
+            width: 60%;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+        }
+
+        .tagline {
+            font-size: 20px;
+            color: #8b949e;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #c9d1d9;
+        }
+
+        @media screen and (max-width: 768px) {
+            .box {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="app-title">SafeShare Pro</div>
+        <a href="{{ url_for('select') }}" class="start-btn">Start</a>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <div class="tagline">Share files securely and instantly</div>
+            <div class="description">
+                SafeShare Pro is a secure, fast, and user-friendly platform designed for businesses to share sensitive files effortlessly.
+                There’s no server storage — files are shared directly between users using end-to-end encryption.
+                No signups. No delays. Just real-time, secure file sharing in professional environments.
+                Built with trust. Backed by encryption. Inspired by simplicity.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 30px;
+        }
+        h2 {
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        th, td {
+            padding: 25px;
+            border: 1px solid #30363d;
+            text-align: left;
+        }
+        th {
+            background-color: #161b22;
+        }
+        tr:nth-child(even) {
+            background-color: #1e252c;
+        }
+        input[type="text"], input[type="password"] {
+            padding: 8px;
+            width: 100%;
+            background-color: #21262d;
+            color: white;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+        }
+        .btn {
+            padding: 6px 12px;
+            font-size: 14px;
+            margin: 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .approve { background-color: #238636; color: white; }
+        .reject { background-color: #da3633; color: white; }
+        .update { background-color: #8250df; color: white; }
+        .delete { background-color: #8b949e; color: black; }
+        .logout-btn {
+            float: right;
+            background-color: #f85149;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .logout-btn:hover {
+            background-color: #da3633;
+        }
+        .section-title {
+            margin-top: 60px;
+        }
+        .error {
+            color: yellow;
+            margin-bottom: 15px;
+        }
+        .login-box {
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .login-box h3 {
+            text-align: center;
+            color: #58a6ff;
+            margin-bottom: 15px;
+        }
+        .msg {
+            color: yellow;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+{% if admin_logged_in %}
+    <a href="/logout" class="logout-btn">Logout</a>
+    <h2>Admin Dashboard</h2>
+
+    <h3 class="section-title">Pending Users</h3>
+    <table>
+        <tr>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Position</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in pending_users %}
+        <tr>
+            <td>{{ user['fullname'] }}</td>
+            <td>{{ user['username'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>{{ user['position'] }}</td>
+            <td>
+                <form method="POST" action="/admin/approve">
+                    <input type="hidden" name="username" value="{{ user['username'] }}">
+                    <input type="text" name="comment" placeholder="Comment required" required>
+            </td>
+            <td>
+                    <button class="btn approve" name="action" value="approve">Approve</button>
+                    <button class="btn reject" name="action" value="reject">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3 class="section-title">All Users</h3>
+    <table>
+        <tr>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        {% for user in all_users %}
+        <tr>
+            <td>{{ user['fullname'] }}</td>
+            <td>{{ user['username'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>{{ user['position'] }}</td>
+            <td>{{ user['status'] }}</td>
+            <td>{{ user['comment'] }}</td>
+            <td>
+                {% if user['status'] != 'pending' %}
+                <form method="POST" action="/admin/update_user">
+                    <input type="hidden" name="username" value="{{ user['username'] }}">
+                    <button class="btn delete" name="action" value="delete">Delete</button>
+                </form>
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- ✅ Move document approval section INSIDE this if-block -->
+    <!-- Pending Documents -->
+    <!-- Add inside your admin.html below "Pending Documents" -->
+    <h3 class="section-title">Pending Documents</h3>
+    <table>
+        <tr>
+            <th>Document Name</th>
+            <th>Signed By</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        {% for doc in pending_docs %}
+        <tr>
+            <td>{{ doc['doc_name'] }}</td>
+            <td>{{ doc['signed_by'] }}</td>
+            <td>
+                <form method="POST" action="/admin/approve_doc">
+                    <input type="hidden" name="doc_name" value="{{ doc['doc_name'] }}">
+                    <input type="text" name="comment" placeholder="Required comment" required>
+            </td>
+            <td>
+                    <a class="btn update" href="/view_document/{{ doc['doc_name'] }}" target="_blank">View</a>
+                    <button class="btn approve" name="action" value="approve">Approve</button>
+                    <button class="btn reject" name="action" value="reject">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- All Documents table -->
+    <h3 class="section-title">All Documents</h3>
+    <table>
+        <tr>
+            <th>Document Name</th>
+            <th>Signed By</th>
+            <th>Status</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        {% for doc in all_docs %}
+        <tr>
+            <td>{{ doc['doc_name'] }}</td>
+            <td>{{ doc['signed_by'] }}</td>
+            <td>{{ doc['status'] }}</td>
+            <td>{{ doc['comment'] }}</td>
+            <td>
+                <form method="POST" action="/admin/delete_doc">
+                    <input type="hidden" name="doc_name" value="{{ doc['doc_name'] }}">
+                    <button class="btn delete" onclick="return confirm('Are you sure?')" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+{% else %}
+    <div class="login-box">
+        <h3>Admin Login</h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <label>Username:</label>
+            <input type="text" name="username" required><br><br>
+
+            <label>Password:</label>
+            <input type="password" name="password" required><br><br>
+
+            <button class="btn approve" type="submit" style="width: 100%;">Login</button>
+        </form>
+    </div>
+{% endif %}
+
+</body>
+</html>

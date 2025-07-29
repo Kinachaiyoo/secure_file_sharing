@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Token | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+        }
+        .token-box {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 16px;
+            word-break: break-all;
+            margin: 20px 0;
+            border-radius: 8px;
+            color: #c9d1d9;
+        }
+        .note {
+            color: #f2cc60;
+            font-size: 14px;
+        }
+        .btn {
+            background-color: #238636;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Registration Successful</h2>
+        <p>Hello <strong>{{ username }}</strong>, your account has been created.</p>
+        <p class="note">Please copy and store the following login token securely. You will need it during login to verify your identity.</p>
+        <div class="token-box">{{ token }}</div>
+        <a href="/login" class="btn">Go to Login</a>
+    </div>
+</body>
+</html>

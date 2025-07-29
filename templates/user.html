@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Portal | SafeShare Pro</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 60px;
+        }
+        h2 {
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #c9d1d9;
+            margin-bottom: 30px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+        .green {
+            background-color: #238636;
+        }
+        .blue {
+            background-color: #0969da;
+        }
+        .button:hover {
+            opacity: 0.9;
+        }
+        .home-link {
+            margin-top: 20px;
+        }
+        .home-link a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to the User Portal</h2>
+    <p>Choose an option below:</p>
+    <div class="btn-group">
+        <a href="/register" class="button green">Register</a>
+        <a href="/login" class="button blue">Login</a>
+    </div>
+
+    <div class="home-link">
+        <a href="{{ url_for('select') }}">← Go to Home</a>
+    </div>
+</body>
+</html>
